@@ -1,33 +1,57 @@
 <html>
-
+<head>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+</head>
 <body>
 
-  
-    <div class="dropdowncontaineritem">
-        <div class="ddtitle">Browse by Category: </div>
-        <select name="getcategoryoffers" id="getcategoryoffers" style="background-color:white;color:black;">
-            <% for(let i=0; i < datacategory.length; i++) { %>
-                <option value=<%= datacategory[i].category_value %> >
-        
-                    <%= datacategory[i].browse_category %>
-                </option>
-                <% } %>
-
-        </select>
-    </div>
+  <div class="drop_down_container">
+      <div class="card_drop_head">SELECT CREDIT CARD</div>
+      <div class="dropdown_content">
+            <div class="dropdowncontaineritem">
+                    <div class="ddtitle">Browse by Category: </div>
+                    <div class="ddbtn">
+                    <select class="getDropdown" name="getcategoryoffers" id="getcategoryoffers" style="background-color:white;color:black;">
+                        <% for(let i=0; i < datacategory.length; i++) { %>
+                            <option value=<%= datacategory[i].category_value %> >
+                    
+                                <%= datacategory[i].browse_category %>
+                            </option>
+                            <% } %>
+            
+                    </select>
+                </div>
+                </div>
+                
+                <div class="dropdowncontaineritem">
+                    <div class="ddtitle">Browse by Bank: </div>
+                    <div class="ddbtn">
+                    <select class="getDropdown" name="getbankoffers" id="getbankoffers" style="background-color:white;color:black;">
+                        <% for(let i=0; i < databank.length; i++) { %>
+                            <option value=<%= databank[i].bank_value %> >
+                    
+                                <%= databank[i].browse_bank %>
+                            </option>
+                            <% } %>
+                    </select>
+                </div>
+                </div>
+                <div class="dropdowncontaineritem">
+                    <div class="ddtitle">Browse by Credit Rating: </div>
+                    <div class="ddbtn">
+                    <select class="getDropdown" name="getcreditratingoffers" id="getcreditratingoffers" style="background-color:white;color:black;">
+                        <% for(let i=0; i < datarating.length; i++) { %>
+                            <option value=<%= datarating[i].rating_value %> >
+                    
+                                <%= datarating[i].browse_rating %>
+                            </option>
+                            <% } %>
+            
+                    </select>
+                    </div>
+                </div>
+      </div>
+  </div>
     
-    <div class="dropdowncontaineritem">
-        <div class="ddtitle">Browse by Bank: </div>
-        <select name="getbankoffers" id="getbankoffers" style="background-color:white;color:black;">
-            <% for(let i=0; i < databank.length; i++) { %>
-                <option value=<%= databank[i].bank_value %> >
-        
-                    <%= databank[i].browse_bank %>
-                </option>
-                <% } %>
-
-        </select>
-    </div>
 
 
 
@@ -40,8 +64,7 @@
             
             <script>
                
-                    
-
+                   
                 
                 var arr = [];
                 function htmlDecode(input){
@@ -50,32 +73,36 @@
                          return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
                 }
 
-                function getData(getValue,a,b){
+                function getData(getValue,a,b,c){
                     arr=[]; 
-                    var value,bankval;
+                    var value,bankval,rating;
                     
-                    if(a == 'all' && b == 'all'){
+                    if(a == 'all' && b == 'all' && c == 'all'){
                         
                         value ='productcontainer';
                         bankval = 'BankID';
+                        rating = 'CreditRatingID';
                     }
                    
                     else{
                        if(a == 'all'){
                         value ='productcontainer';
                         bankval = 'BankID-'+b+ ' ';
+                        rating = 'CreditRatingID-'+c+ ' ';
                        }
                        else{
                         value = 'CategoryID-'+a+' ';
                         bankval = 'BankID-'+b+ ' ';
+                        rating = 'CreditRatingID-'+c+ ' ';
                        }
                        if(b == 'all'){
                         bankval = 'BankID';
                        }
+                       if(c == 'all'){
+                        rating = 'CreditRatingID';
+                       }
                       
-                       
-                       
-                                          
+                                            
                     }
                     for(let i=0;i<getValue.length;i++){
                        
@@ -83,7 +110,10 @@
                         console.log(value);
                         console.log(bankval);
                       if(getValue[i].card_class.includes(bankval)){   
-                        arr.push(getValue[i]);
+                          if(getValue[i].card_class.includes(rating)){
+                            arr.push(getValue[i]);
+                          }
+                        
                       }
                         
                     } 
@@ -96,20 +126,20 @@
                       var markup='';
                     
                     for(let i=0;i<arrItem.length;i++){
-                        markup +="<div id='product" + i+1 + "' style='margin-left: 20% !important; width: 40%;margin-top:0px !important;border: 1px solid rgb(221, 221, 221);font-family: unset;margin: 10px 5px 20px;' class='" + arrItem[i].card_class + "'>";
-                        markup +="<div id='productheading" + i+1 + "' style='background-color: #3ab1ec;font-size: 16px;font-weight: bold;color: rgb(255, 255, 255);padding-top: 10px;padding-bottom: 10px;padding-left: 8px;text-align: left;'>" + arrItem[i].card_name + "</div>";
-                        markup +="<table width='100%' border='0' cellspacing='0' cellpadding='0' style='border:none;margin:0;padding:0;background-color:white;color:black;'>";
+                        markup +="<div id='product" + (i+1) + "'  class='" + arrItem[i].card_class + "'>";
+                        markup +="<div id='innerproductheading" + (i+1) + "'>" + arrItem[i].card_name + "</div>";
+                        markup +="<table width='100%' border='0' cellspacing='0' cellpadding='0'>";
                         markup +="<tbody><tr style='border:none;margin:0;padding:0;'>";
-                        markup +="<td id='creditcardimage" + i+1 + "' style='width: 150px;text-align: center;border-left: 2px solid rgb(255, 255, 255);padding-top: 10px;background-color: rgb(255, 255, 255);'>";
+                        markup +="<td id='creditcardimage" + (i+1) + "' >";
                         markup +="<img class='noborders nopadding nomargins' src='" + arrItem[i].card_img + "' alt='' width='100' height='63'>";
                         markup +="<br><br></td>";
-                        markup +="<td id='productdescription" + i+1 + "' style='padding-right: 10px;width:64%;padding-top: 10px;background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);font-size: 13px;/* font-family: Lucida Grande; */border-right: 2px solid rgb(255, 255, 255);'>";
+                        markup +="<td id='innerproductdescription" + (i+1) + "'>";
                         markup +="<ul style='line-height: 20px;text-align: left;margin-bottom:0px !important;'>" + arrItem[i].card_desc + "</ul></td>"; 
                         markup +="<td style=' padding-right: 16px; '>";
                         markup +="<a href='" + arrItem[i].card_link + "' target='_blank' class='noborders nopadding nomargins'>";
-                        markup +="<button type='button' class='btn-apply' style=' padding: 9px;color:white; margin: 10px;border-radius: 4px;background: #3ab1ec;border: 0;'>Apply Now</button></a>";
-                        markup +="<div class='creditneededcontainer' style='font-size: 11px;text-align: center;'>";
-                        markup +="<div class='creditneededheading' style='font-size: 12px;font-weight: 700;'>CREDIT NEEDED</div>" + arrItem[i].credit_need1 + "<br>" + arrItem[i].credit_need2 + "<br>";
+                        markup +="<button type='button' class='btn-apply'>Apply Now</button></a>";
+                        markup +="<div class='creditneededcontainer'>";
+                        markup +="<div class='creditneededheading'>CREDIT NEEDED</div>" + arrItem[i].credit_need1 + "<br>" + arrItem[i].credit_need2 + "<br>";
                         markup +="</div></td> </tr></tbody></table></div>";
                     }                    
                    // console.log(markup);
@@ -120,17 +150,20 @@
                  //  document.body.innerHTML= document.body.innerHTML + markup;
                 }
                 var getValue = JSON.parse(htmlDecode("<%= JSON.stringify(data) %>"));
-                var a,b;
-                getData(getValue,a='all',b='all');
+                var a,b,c;
+                getData(getValue,a='all',b='all',c='all');
                 
                 $("#getcategoryoffers").change(function(){
-                     a = $("#getcategoryoffers").val();
-                    
-                    getData(getValue,a,b);
+                     a = $("#getcategoryoffers").val();                   
+                    getData(getValue,a,b,c);
                 });
                 $("#getbankoffers").change(function(){
                      b = $("#getbankoffers").val();                
-                    getData(getValue,a,b);
+                    getData(getValue,a,b,c);
+                });
+                $("#getcreditratingoffers").change(function(){
+                     c = $("#getcreditratingoffers").val();                
+                    getData(getValue,a,b,c);
                 });
                 
             </script>

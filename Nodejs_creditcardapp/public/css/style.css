@@ -1,0 +1,83 @@
+div [id^="product"]{
+    margin-left: 20% !important; 
+    width: 40%;
+    margin-top:0px !important;
+    border: 1px solid rgb(221, 221, 221);
+    font-family: unset;
+    margin: 10px 5px 20px;
+}
+
+div [id^="innerproductheading"]{
+    background-color: #3ab1ec;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 8px;
+    text-align: left;
+}
+
+div [id^="creditcardimage"]{
+    width: 150px;
+    text-align: center;
+    border-left: 2px solid rgb(255, 255, 255);
+    padding-top: 10px;
+    background-color: rgb(255, 255, 255);
+}
+
+div [id^="innerproductdescription"]{
+    padding-right: 10px;
+    width:64%;
+    padding-top: 10px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: 13px;
+    border-right: 2px solid rgb(255, 255, 255);
+}
+.btn-apply{
+    padding: 9px;
+    color:white; 
+    margin: 10px;
+    border-radius: 4px;
+    background: #3ab1ec;
+    border: 0;
+}
+.creditneededcontainer{
+    font-size: 11px;
+    text-align: center;
+}
+.creditneededheading{
+    font-size: 12px;
+    font-weight: 700;
+}
+.drop_down_container{
+    margin-left: 20%;
+    background-color: #3ab1ec;
+    color: white;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    width: 40%;
+    border-radius: 4px;
+    padding: 1px;
+}
+.dropdowncontaineritem{
+    margin: 2%;
+}
+.ddtitle{
+    float: left;
+    margin-left: 30%;
+    width: 170px;
+    font-size:16px;
+}
+.getDropdown{
+    background-color: white;
+    color: black;
+    width: 160px;
+    height: 30px;
+    font-size: 14px !important;
+}
+.card_drop_head{
+    padding: 10px;
+    font-size: 19px;
+}

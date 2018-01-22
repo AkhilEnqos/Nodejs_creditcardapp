@@ -3,16 +3,21 @@ var path = require('path');
 var app = express();
 var request = require('request');
 var cheerio = require('cheerio');
-var fs = require('fs');
+var childProcess = require('child_process');
+var phantomjs = require('phantomjs');
+var binPath = phantomjs.path;
+//var fs = require('fs');
 var mysql = require('mysql');
 var bodyParser = require("body-parser");
+
 var cardDescText=[];
-var cardCategory=[],card_bank=[];
+var cardCategory=[],card_bank=[],card_rating=[];
 //mysql dbconnection
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
+    multipleStatements: true,
     database: "mydb"
   });
 
@@ -22,19 +27,24 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/app.html');
-});
+// app.get('/', function (req, res) {
+//     res.sendFile('http://localhost/enqosweb/creditcard/');
+// });
 
-app.post('/mydata', function (req, res) {
-    var $ = cheerio.load(req.body.bodyData);
-
-    var numItems = $('div.productcontainer').length;
+var childArgs = [
+  path.join(__dirname, 'script.js'),
+  'some other argument (passed to phantomjs script)'
+];
+ 
+childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
+  //console.log(stdout);
+  var $ = cheerio.load(stdout);
+   
+  var numItems = $('div.productcontainer').length;
     
   //  console.log(numItems);
     for(var i=1;i<=numItems;i++){
-        var cardDetails = [];
-        
+        var cardDetails = [];       
         cardDetails.push($('#productheading'+i).text());
         cardDetails.push($('#productdescription'+i+ ' ul li'));
         cardDetails.push($('#creditcardimage'+i+ ' img').attr('src'));
@@ -68,14 +78,23 @@ $('#product'+i).parent().each(function(){
      cardbank.push($(this).val());
      card_bank.push(cardbank);
  });
+ $('#getcreditratingoffers option').each(function(){
+      var cardrating = [];
+     cardrating.push($(this).html());
+     cardrating.push($(this).val());
+     card_rating.push(cardrating);
+ });
 
 
-   
-    
-    con.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-        var sql = "INSERT INTO creditcard (card_name, card_desc, card_img, card_link, credit_need1, credit_need2, card_class) VALUES ?";
+ con.connect(function(err) {
+  if (err) throw err;
+  var sql0 = "DELETE FROM creditcard;DELETE FROM card_category;DELETE FROM card_bank;DELETE FROM card_rating;";
+  con.query(sql0, function (err, result) {
+    if (err) {
+      throw err;
+    }
+    else{
+      var sql = "INSERT INTO creditcard (card_name, card_desc, card_img, card_link, credit_need1, credit_need2, card_class) VALUES ?";
         con.query(sql, [cardDescText], function (err, result) {
           if (err){
             throw err;
@@ -87,7 +106,14 @@ $('#product'+i).parent().each(function(){
               else{
                 var sql3 = "INSERT INTO card_bank (browse_bank,bank_value) VALUES ?";
                 con.query(sql3, [card_bank], function (err, result) {
-                  if (err) throw err;
+                  if (err) {throw err;}
+                  else{
+                    var sql3 = "INSERT INTO card_rating (browse_rating,rating_value) VALUES ?";
+                    con.query(sql3, [card_rating], function (err, result) {
+                      if (err) throw err;
+                      console.log("1 record inserted");
+                    });
+                  }
                   console.log("1 record inserted");
                 });
               }
@@ -96,15 +122,19 @@ $('#product'+i).parent().each(function(){
           }
           console.log("1 record inserted");
         });
-      });
-     
-
-      
-
-    res.end(req.body.bodyData);
+    }
+   // console.log("Number of records deleted: " + result.affectedRows);
+  });
+});
 });
 
-var port = 8081;
+// app.post('/mydata', function (req, res) {
+
+//     var $ = cheerio.load(req.body.bodyData);
+//     res.end(req.body.bodyData);
+// });
+
+var port = 8083;
 
 
 

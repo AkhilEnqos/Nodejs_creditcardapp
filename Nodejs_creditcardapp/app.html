@@ -17,15 +17,3 @@
   var $addjquery = "yes";
 </script>
 <script type="text/javascript" src="//www.creditcardbroker.com/includes/get_feed_with_header.php?aid=feed9597&feedtype=all"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript">
-  setTimeout(function () {
-    var bodyTag = document.getElementsByTagName('body')[0].innerHTML;
-    $.post("http://localhost:8081/mydata", {
-      bodyData: bodyTag
-    }, function (data) {
-      console.log(data);
-    });
-
-  }, 5000);
-</script>
