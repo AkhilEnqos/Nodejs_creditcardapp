@@ -88,27 +88,22 @@ $('#product'+i).parent().each(function(){
 
  con.connect(function(err) {
   if (err) throw err;
-  var sql0 = "DELETE FROM creditcard;DELETE FROM card_category;DELETE FROM card_bank;DELETE FROM card_rating;";
-  con.query(sql0, function (err, result) {
-    if (err) {
-      throw err;
-    }
-    else{
-      var sql = "INSERT INTO creditcard (card_name, card_desc, card_img, card_link, credit_need1, credit_need2, card_class) VALUES ?";
+  
+      var sql = "REPLACE INTO creditcard (card_name, card_desc, card_img, card_link, credit_need1, credit_need2, card_class) VALUES ?";
         con.query(sql, [cardDescText], function (err, result) {
           if (err){
             throw err;
           } 
           else{
-            var sql2 = "INSERT INTO card_category (browse_category,category_value) VALUES ?";
+            var sql2 = "REPLACE INTO card_category (browse_category,category_value) VALUES ?";
             con.query(sql2, [cardCategory], function (err, result) {
               if (err) {throw err;}
               else{
-                var sql3 = "INSERT INTO card_bank (browse_bank,bank_value) VALUES ?";
+                var sql3 = "REPLACE INTO card_bank (browse_bank,bank_value) VALUES ?";
                 con.query(sql3, [card_bank], function (err, result) {
                   if (err) {throw err;}
                   else{
-                    var sql3 = "INSERT INTO card_rating (browse_rating,rating_value) VALUES ?";
+                    var sql3 = "REPLACE INTO card_rating (browse_rating,rating_value) VALUES ?";
                     con.query(sql3, [card_rating], function (err, result) {
                       if (err) throw err;
                       console.log("1 record inserted");
@@ -122,9 +117,9 @@ $('#product'+i).parent().each(function(){
           }
           console.log("1 record inserted");
         });
-    }
+    
    // console.log("Number of records deleted: " + result.affectedRows);
-  });
+
 });
 });
 
